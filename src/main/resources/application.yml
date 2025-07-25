@@ -8,7 +8,7 @@ spring:
     activate:
       on-profile: local
   kafka:
-    topic: "test-topic"
+    topic: "library-events"
     producer:
       bootstrap-servers:
         - localhost:9092

@@ -1,9 +1,16 @@
 POST WITH-NULL-LIBRARY-EVENT-ID
 ---------------------
+For Unix/Linux:
 curl -i \
 -d '{"libraryEventId":null,"libraryEventType": "NEW","book":{"bookId":456,"bookName":"Kafka Using Spring Boot","bookAuthor":"Dilip"}}' \
 -H "Content-Type: application/json" \
 -X POST http://localhost:8080/v1/library-event
+
+For Windows Terminal/PowerShell:
+curl -Method POST "http://localhost:8080/v1/library-event" `
+     -Headers @{ "Content-Type" = "application/json" } `
+     -Body '{ "libraryEventId": null, "libraryEventType": "NEW", "book": { "bookId": 456, "bookName": "Kafka Using Spring Boot", "bookAuthor": "Dilip" } }'
+
 
 PUT WITH ID - 1
 --------------
