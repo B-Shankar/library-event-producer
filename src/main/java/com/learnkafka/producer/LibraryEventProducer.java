@@ -6,11 +6,14 @@ import com.learnkafka.config.KafkaProperties;
 import com.learnkafka.domain.LibraryEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -83,7 +86,9 @@ public class LibraryEventProducer {
     }
 
     private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value) {
-        return new ProducerRecord<>(kafkaProperties.getTopic(), key, value);
+        List<Header> recordHeaders = List.of(new RecordHeader("event-source", "scanner".getBytes()));
+
+        return new ProducerRecord<>(kafkaProperties.getTopic(), null, key, value, recordHeaders);
     }
 
     private void handleSuccess(Integer key, String value, SendResult<Integer, String> sendResult) {
