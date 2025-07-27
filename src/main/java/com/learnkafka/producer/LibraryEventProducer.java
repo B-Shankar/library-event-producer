@@ -11,6 +11,8 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 @Slf4j
 @Component
@@ -44,6 +46,22 @@ public class LibraryEventProducer {
                 handleSuccess(key, value, sendResult);
             }
         });
+    }
+
+    public SendResult<Integer, String> sendLibraryEvent_approach2(LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
+        var key = libraryEvent.libraryEventId();
+        var value = objectMapper.writeValueAsString(libraryEvent);
+
+        //1. Blocking Call - get metadata about the kafka cluster.
+        //2. Block and Wait - Until the message is sent to Kafka
+
+//        var sendResult = kafkaTemplate.send(kafkaProperties.getTopic(), key, value).get();
+
+        var sendResult = kafkaTemplate.send(kafkaProperties.getTopic(), key, value).get(3, java.util.concurrent.TimeUnit.SECONDS); //TimeoutException also
+        //it will throw an exception if the message is not sent within the specified time.
+
+        handleSuccess(key, value, sendResult);
+        return sendResult;
     }
 
     private void handleSuccess(Integer key, String value, SendResult<Integer, String> sendResult) {
