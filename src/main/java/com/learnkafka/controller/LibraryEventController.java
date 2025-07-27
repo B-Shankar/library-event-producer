@@ -34,9 +34,14 @@ public class LibraryEventController {
         //log.info("After sending the library event to Kafka");
 
         //Approach 2: Blocking call : Synchronous Call
+        //log.info("Library Event: {}", libraryEvent);
+        //var sendResult = libraryEventProducer.sendLibraryEvent_approach2(libraryEvent);
+        //log.info("After sending the library event to Kafka, SendResult: {}", sendResult);
+
+        //Approach 3: Non-blocking call with CompletableFuture Using ProducerRecord
         log.info("Library Event: {}", libraryEvent);
-        var sendResult = libraryEventProducer.sendLibraryEvent_approach2(libraryEvent);
-        log.info("After sending the library event to Kafka, SendResult: {}", sendResult);
+        libraryEventProducer.sendLibraryEvent_approach3(libraryEvent);
+        log.info("After sending the library event to Kafka");
 
         //Invoke the kafka producer
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
