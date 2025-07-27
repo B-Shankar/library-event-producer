@@ -32,6 +32,8 @@ public class LibraryEventProducer {
         var key = libraryEvent.libraryEventId();
         var value = objectMapper.writeValueAsString(libraryEvent);
 
+        //1. Blocking Call - get metadata about the kafka cluster.
+        //2. Send message happens - Returns the CompletableFuture
         var completableFuture = kafkaTemplate.send(kafkaProperties.getTopic(), key, value);
 
         return completableFuture.whenComplete((sendResult, exception) -> {

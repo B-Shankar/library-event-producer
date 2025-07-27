@@ -11,8 +11,12 @@ import org.springframework.kafka.config.TopicBuilder;
 @EnableConfigurationProperties(KafkaProperties.class)
 public class AutoCreateConfig {
 
+    private final KafkaProperties kafkaProperties;
+
     @Autowired
-    private KafkaProperties kafkaProperties;
+    public AutoCreateConfig(KafkaProperties kafkaProperties) {
+        this.kafkaProperties = kafkaProperties;
+    }
 
     @Bean
     public NewTopic libraryEvents() {
